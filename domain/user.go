@@ -48,3 +48,6 @@ func (u *User) CreateNewUser(name string, familyName string, email string, passw
 	}
 	return user, nil
 }
+
+type UserService interface {
+}
