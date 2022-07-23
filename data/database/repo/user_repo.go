@@ -3,6 +3,7 @@ package repo
 import (
 	"errors"
 	"gorm.io/gorm"
+	"github.com/alirezazeynali75/simple-to-do-app/model"
 )
 
 type UserRepo struct {
@@ -35,3 +36,5 @@ func (userRepo *UserRepo) RollbackTransaction() (bool, error) {
 	userRepo.transaction.Rollback()
 	return true, nil
 }
+
+func (userRepo *UserRepo) findByPk() (User)
