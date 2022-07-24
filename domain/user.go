@@ -50,4 +50,8 @@ func (u *User) CreateNewUser(name string, familyName string, email string, passw
 }
 
 type UserService interface {
+	SignUp() (bool, error)
+	Login() (string, User, error)
+	List() ([]User, error)
+	UpdatePassword() (bool, error)
 }
