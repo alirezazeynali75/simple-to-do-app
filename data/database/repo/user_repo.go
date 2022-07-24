@@ -11,10 +11,10 @@ type UserRepo struct {
 	transaction *gorm.DB
 }
 
-func (userRepo *UserRepo) BeginTransaction(tx *gorm.DB) Repos {
+func (userRepo UserRepo) BeginTransaction(tx *gorm.DB) Repos {
 	if tx != nil {
 		userRepo.transaction = tx
-		return userRepo
+		return &userRepo
 	} else {
 		tx := userRepo.db.Begin()
 		return &UserRepo{userRepo.db, tx}
