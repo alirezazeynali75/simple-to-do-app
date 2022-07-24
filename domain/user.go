@@ -35,7 +35,7 @@ func (u *User) CheckPassword(password string) bool {
 	return isVerified
 }
 
-func (u *User) CreateNewUser(name string, familyName string, email string, password string, username string) (*User, error) {
+func CreateNewUser(name string, familyName string, email string, password string, username string) (*User, error) {
 	user := &User{
 		Name: name,
 		FamilyName: name,
@@ -50,8 +50,8 @@ func (u *User) CreateNewUser(name string, familyName string, email string, passw
 }
 
 type UserService interface {
-	SignUp() (bool, error)
-	Login() (string, User, error)
+	SignUp(name string, familyName string, email string, password string, username string, nationalId uint) (bool, error)
+	Login(username string, password string) (string, *User, error)
 	List() ([]User, error)
 	UpdatePassword() (bool, error)
 }

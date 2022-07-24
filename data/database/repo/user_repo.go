@@ -93,3 +93,13 @@ func (userRepo *UserRepo) FindActiveUser() ([]model.User, error) {
 	}
 	return users, nil
 }
+
+func (userRepo *UserRepo) FindByUsername(username string) (*model.User, error) {
+	dbUser := new(model.User)
+	db := userRepo.getDb()
+	result := db.First(dbUser, "username = ?", username)
+	if (result.Error != nil) {
+		return nil, result.Error
+	}
+	return dbUser, nil
+}

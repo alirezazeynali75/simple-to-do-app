@@ -14,4 +14,5 @@ type UserRepository interface {
 	Create(user *model.User) (bool, error)
 	FindAll() ([]model.User, error)
 	FindActiveUser() ([]model.User, error)
+	FindByUsername(username string) (*model.User, error) 
 }
