@@ -62,3 +62,30 @@ func (us *UserService) Login(username string, password string) (string, *domain.
 	return token, user, nil
 }
 
+func (us *UserService) List() ([]domain.User, error) {
+	dbUsers, dbErr := us.userRepo.FindActiveUser()
+	if dbErr != nil {
+		return nil, dbErr
+	}
+	users := []domain.User{}
+	for _, v := range dbUsers {
+		users = append(users, domain.User{
+			Id: v.ID,
+			Name: v.Name,
+			FamilyName: v.FamilyName,
+			Password: v.Password,
+			Email: v.Email,
+			Username: v.UserName,
+			IsActivated: v.IsActivated,
+			CreatedAt: v.CreatedAt,
+			UpdatedAt: v.UpdatedAt,
+			DeletedAt: v.DeletedAt.Time,
+		})
+	}
+	return users, nil
+}
+
+func (us *UserService) UpdatedAt() (bool, error) {
+	return false, errors.New("method not implemented")
+}
+
