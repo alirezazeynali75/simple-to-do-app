@@ -9,8 +9,8 @@ import (
 )
 
 type UserService struct {
-	userRepo ports.UserRepository
-	jwt *domain.JwtManager
+	UserRepo ports.UserRepository
+	Jwt *domain.JwtManager
 }
 
 
@@ -28,7 +28,7 @@ func (us *UserService) SignUp(name string, familyName string, email string, pass
 		Email: user.Email,
 		IsActivated: true,
 	}
-	isCreated, dbErr := us.userRepo.Create(userModel)
+	isCreated, dbErr := us.UserRepo.Create(userModel)
 	if dbErr != nil {
 		return false, dbErr
 	}
@@ -36,7 +36,7 @@ func (us *UserService) SignUp(name string, familyName string, email string, pass
 }
 
 func (us *UserService) Login(username string, password string) (string, *domain.User, error) {
-	dbUser, err := us.userRepo.FindByUsername(username)
+	dbUser, err := us.UserRepo.FindByUsername(username)
 	if err != nil {
 		return "", nil, err
 	}
@@ -55,7 +55,7 @@ func (us *UserService) Login(username string, password string) (string, *domain.
 	if !isVerified {
 		return "", nil, errors.New("password not verified")
 	}
-	token, jwtErr := us.jwt.Generate(user)
+	token, jwtErr := us.Jwt.Generate(user)
 	if jwtErr != nil {
 		return "", nil, errors.New("password not verified")
 	}
@@ -63,7 +63,7 @@ func (us *UserService) Login(username string, password string) (string, *domain.
 }
 
 func (us *UserService) List() ([]domain.User, error) {
-	dbUsers, dbErr := us.userRepo.FindActiveUser()
+	dbUsers, dbErr := us.UserRepo.FindActiveUser()
 	if dbErr != nil {
 		return nil, dbErr
 	}
@@ -85,7 +85,7 @@ func (us *UserService) List() ([]domain.User, error) {
 	return users, nil
 }
 
-func (us *UserService) UpdatedAt() (bool, error) {
+func (us *UserService) UpdatePassword() (bool, error) {
 	return false, errors.New("method not implemented")
 }
 
