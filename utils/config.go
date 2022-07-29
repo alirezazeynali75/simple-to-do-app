@@ -3,6 +3,8 @@ package utils
 import "github.com/spf13/viper"
 
 type Config struct {
+	DbUser		string  `mapstructure:"DB_USER"`
+	DbPass		string	`mapstructure:"DB_PASS"`
 	DbHost 		string	`mapstructure:"DB_HOST"`
 	DbPort 		string	`mapstructure:"DB_PORT"`
 	DbName 		string	`mapstructure:"DB_NAME"`
@@ -10,7 +12,7 @@ type Config struct {
 }
 
 func (c *Config) GetDbSource() string {
-	return c.DbDriver + "//" + c.DbHost+":" + c.DbPort
+	return c.DbDriver + "//" + c.DbUser + ":" + c.DbPass + "@" + c.DbHost+":" + c.DbPort + "/" + c.DbName
 }
 
 func LoadEnv() {
