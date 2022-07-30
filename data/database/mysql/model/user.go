@@ -10,7 +10,5 @@ type User struct {
 	PhoneNumber string `gorm:"unique;column=phone_number;size=256"`
 	Password string `gorm:"column=password;size=512"`
 	IsActivated bool `gorm:"column=is_activated;default=true"`
-	ReporterOf []Tasks
-	AssigneOf []Tasks
 	gorm.Model
 }

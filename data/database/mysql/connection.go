@@ -9,12 +9,14 @@ import (
 )
 
 func OpenConnection() *gorm.DB {
-	config := utils.Config{}
+	config := utils.GetConfig()
 	fmt.Println(config.GetDbSource())
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DriverName: config.DbDriver,
 		DSN: config.GetDbSource(),
-	}))
+	}), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
 		panic(err)
 	}
