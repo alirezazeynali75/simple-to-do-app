@@ -21,6 +21,7 @@ func parent() {
 	db := mysql.OpenConnection()
 	defer mysql.KillConnection(db)
 	r := gin.Default()
+	jwtm := interfaces.GetJwtManagerInstance("Alirez@1375", time.Duration(time.Hour * 2))
 	userApi := api.UserApi{
 		Us: &services.UserService{
 			Repo: &repos.UserRepo{
@@ -28,10 +29,12 @@ func parent() {
 					Db: db,
 				},
 			},
-			JwtManager: *interfaces.GetJwtManagerInstance("Alirez@1375", time.Duration(time.Hour * 2)),
+			JwtManager: *jwtm,
 		},
 	}
 	engine := userApi.RegisterRoutes(r)
+	pingApi := api.PingApi{}
+	engine = pingApi.RegisterRoutes(engine)
 	engine.Run()
 }
 

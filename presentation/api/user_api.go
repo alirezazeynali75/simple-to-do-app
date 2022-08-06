@@ -101,7 +101,7 @@ func (ua *UserApi) Login(ctx *gin.Context) {
 }
 
 func (ua *UserApi) RegisterRoutes(r *gin.Engine) *gin.Engine {
-	r.POST("/sign_up", ua.SignUp)
-	r.POST("/login", ua.Login)
+	r.POST("/api/user/sign_up", ua.SignUp)
+	r.POST("/api/user/login", ua.Login)
 	return r
 }

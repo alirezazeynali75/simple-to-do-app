@@ -13,4 +13,5 @@ type NotOkResponse struct {
 const (
 	VALIDATION_FAILED = 4001
 	SIGN_UP_FAILED = 1001
+	FALIED_AUTH = 4000
 )
