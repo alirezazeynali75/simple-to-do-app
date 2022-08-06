@@ -1,6 +1,8 @@
 package repos
 
 import (
+	"errors"
+
 	"github.com/alirezazeynali75/simple-to-do-app/data/database/mysql/model"
 	"gorm.io/gorm"
 )
@@ -39,7 +41,7 @@ func (r *UserRepo) List() ([]model.User, error) {
 	return users, nil
 }
 
-func (r *UserRepo) Create(username string, password string, email string, phoneNumber string) (bool, error) {
+func (r *UserRepo) Create(username string, password string, email string, phoneNumber string) (*model.User, error) {
 	user := &model.User{
 		Username: username,
 		Password: password,
@@ -48,7 +50,7 @@ func (r *UserRepo) Create(username string, password string, email string, phoneN
 	}
 	db := r.getDb()
 	db.Create(user)
-	return true, nil
+	return user, nil
 }
 
 func (r *UserRepo) UpdateById(id uint, username string, password string, email string) (bool, error) {
@@ -75,4 +77,46 @@ func (r *UserRepo) Delete(id uint) error {
 		return err
 	}
 	return nil
+}
+
+func (r *UserRepo) GetByEmail(email string) (*model.User, error) {
+	db := r.getDb()
+	user := new(model.User) 
+	result := db.First(user, "email = ?", email)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return user, nil
+}
+
+func (r *UserRepo) IsExistByEmail(email string) (bool, error) {
+	user, err := r.GetByEmail(email)
+	if err != nil {
+		return false, nil
+	}
+	if user.Email != email {
+		return false, errors.New("query result is not ok")
+	}
+	return true, nil
+}
+
+func (r *UserRepo) GetByUsername(username string) (*model.User, error) {
+	db := r.getDb()
+	var user *model.User = &model.User{}
+	result := db.Model(&model.User{}).First(user, &model.User{Username: username})
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return user, nil
+}
+
+func (r *UserRepo) IsExistByUsername(username string) (bool, error) {
+	user, err := r.GetByUsername(username)
+	if err != nil {
+		return false, nil
+	}
+	if user.Username != username {
+		return false, errors.New("query result is not ok")
+	}
+	return true, nil
 }
