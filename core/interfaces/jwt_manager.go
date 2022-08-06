@@ -1,4 +1,4 @@
-package domain
+package interfaces
 
 import (
 	"errors"
@@ -8,8 +8,8 @@ import (
 )
 
 type JwtManager struct {
-	secretKey string
-	tokenDuration time.Duration
+	SecretKey string
+	TokenDuration time.Duration
 }
 
 type UserClaims struct {
@@ -17,24 +17,28 @@ type UserClaims struct {
 	Id uint `json:"id"`
 }
 
-func NewJWTManager(secretKey string, tokenDuration time.Duration) *JwtManager {
-	return &JwtManager{
-		secretKey: secretKey,
-		tokenDuration: tokenDuration,
-	}
-}
+var jwtManagerInstance *JwtManager
 
+func GetJwtManagerInstance(secretKey string, tokenDuration time.Duration) *JwtManager {
+	if jwtManagerInstance == nil {
+		jwtManagerInstance = &JwtManager{
+			SecretKey: secretKey,
+			TokenDuration: tokenDuration,
+		}
+	}
+	return jwtManagerInstance
+}
 
 func (m *JwtManager) Generate(u *User) (string, error) {
 	claims := UserClaims{
 		StandardClaims: jwt.StandardClaims{
 			IssuedAt: time.Now().UTC().Unix(),
-			ExpiresAt: time.Now().UTC().Add(m.tokenDuration).Unix(),
+			ExpiresAt: time.Now().UTC().Add(m.TokenDuration).Unix(),
 		},
 		Id: u.Id,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(m.secretKey))
+	return token.SignedString([]byte(m.SecretKey))
 }
 
 func (m *JwtManager) Verify(accessToken string) (*UserClaims, error) {
@@ -46,7 +50,7 @@ func (m *JwtManager) Verify(accessToken string) (*UserClaims, error) {
 			if !ok {
 				return nil, errors.New("jwt is not okey")
 			}
-			return []byte(m.secretKey), nil
+			return []byte(m.SecretKey), nil
 		},
 	)
 	if err != nil {
