@@ -4,5 +4,5 @@ type OkResponse struct {
 	BaseResponse
 	Message string `json:"message"`
 	Info PaginationResponse `json:"info"`
-	Result interface{}	`json:"Result"`
+	Result interface{}	`json:"result"`
 }

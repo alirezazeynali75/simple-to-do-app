@@ -21,6 +21,7 @@ type User struct {
 func CreateUser(domainModel *model.User) *User {
 	user := &User{
 		Id: domainModel.ID,
+		Username: domainModel.Username,
 		Email: domainModel.Email,
 		PhoneNumber: domainModel.PhoneNumber,
 		Password: domainModel.Password,
